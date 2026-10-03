@@ -121,7 +121,7 @@ st.markdown("""
         background-color: #2563eb !important;
         color: white !important;
     }
-</style>s
+</style>
 """, unsafe_allow_html=True)
 
 # ==============================================================================
@@ -141,15 +141,47 @@ def run_sql_query(query: str) -> pd.DataFrame:
     return pd.read_sql_query(query, conn)
 
 # ==============================================================================
-# MODEL LOADERS (RELATIVE PATHS)
+# MODEL LOADERS (RELATIVE PATHS & COMPATIBILITY PATCHING)
 # ==============================================================================
+def patch_sklearn_estimator(estimator):
+    """
+    Ensures bidirectional compatibility across different scikit-learn versions
+    (e.g., SimpleImputer's _fill_dtype vs _fit_dtype attribute changes between sklearn versions).
+    """
+    if estimator is None:
+        return
+    if hasattr(estimator, 'named_steps'):
+        for step in estimator.named_steps.values():
+            patch_sklearn_estimator(step)
+    if hasattr(estimator, 'transformers_'):
+        for item in estimator.transformers_:
+            if len(item) >= 2:
+                patch_sklearn_estimator(item[1])
+    if hasattr(estimator, 'named_transformers_'):
+        for transformer in estimator.named_transformers_.values():
+            patch_sklearn_estimator(transformer)
+    if hasattr(estimator, 'steps'):
+        for step in estimator.steps:
+            if isinstance(step, tuple) and len(step) >= 2:
+                patch_sklearn_estimator(step[1])
+            else:
+                patch_sklearn_estimator(step)
+    
+    # Fix SimpleImputer attribute mismatch across scikit-learn versions
+    if hasattr(estimator, '_fit_dtype') and not hasattr(estimator, '_fill_dtype'):
+        estimator._fill_dtype = getattr(estimator, '_fit_dtype')
+    elif hasattr(estimator, '_fill_dtype') and not hasattr(estimator, '_fit_dtype'):
+        estimator._fit_dtype = getattr(estimator, '_fill_dtype')
+
 @st.cache_resource
 def load_churn_model():
     model_path = os.path.join(os.path.dirname(__file__), "models", "churn_pipeline.pkl")
     if not os.path.exists(model_path):
         model_path = "models/churn_pipeline.pkl"
     with open(model_path, "rb") as f:
-        return pickle.load(f)
+        pipe = pickle.load(f)
+    patch_sklearn_estimator(pipe)
+    return pipe
 
 @st.cache_resource
 def load_sentiment_models():
@@ -163,6 +195,8 @@ def load_sentiment_models():
         vectorizer = pickle.load(f)
     with open(clf_path, "rb") as f:
         classifier = pickle.load(f)
+    patch_sklearn_estimator(vectorizer)
+    patch_sklearn_estimator(classifier)
     return vectorizer, classifier
 
 # ==============================================================================
