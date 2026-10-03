@@ -1,38 +1,9 @@
 # 🛍️ AI-Powered E-Commerce Customer Intelligence System
-### Data Science Final Hackathon — Complete End-to-End Solution
-
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://streamlit.io)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
----
 
 ## 📌 1. Project Overview
 This repository contains the complete production-grade solution for the **Data Science Final Hackathon: AI-Powered E-Commerce Customer Intelligence System**. 
 
 The goal is to analyze an e-commerce database of **100,000 records** (`ecommerce_hackathon.db`), extract strategic business intelligence using SQL, train predictive machine learning and deep learning models to predict customer churn, perform NLP sentiment analysis on customer reviews, and deploy an interactive executive analytics web application on **Streamlit Community Cloud**.
-
----
-
-## 🏗️ 2. Repository Structure
-
-```plaintext
-hackathon/
-│
-├── Final_Data_Science_Hackathon_Student_Task.pdf   # Official Hackathon Task Brief
-├── ecommerce_hackathon.db                          # SQLite3 Database (100,000 rows across 4 tables)
-├── Hackathon_Complete_Solution.ipynb               # Master End-to-End Jupyter Notebook (Tasks A - F)
-├── queries.sql                                     # 5 Required Business SQL Queries
-├── app.py                                          # Multi-page Streamlit Analytics Application
-├── requirements.txt                                # Python Project Dependencies
-├── README.md                                       # Comprehensive Documentation & Insights
-│
-└── models/                                         # Serialized Model Artifacts (Loaded via Relative Paths)
-    ├── churn_pipeline.pkl                          # Scikit-Learn Preprocessor + Random Forest Pipeline
-    ├── churn_nn.pth                                # PyTorch Feed-Forward Neural Network (32 -> 16 -> 1)
-    ├── tfidf_vectorizer.pkl                        # TF-IDF Vectorizer for NLP Sentiment
-    └── sentiment_model.pkl                         # Balanced Logistic Regression Classifier
-```
 
 ---
 
@@ -47,7 +18,7 @@ hackathon/
 
 ---
 
-## 📊 4. Task B: SQL Business Analysis (`queries.sql`)
+## 📊 4. Task B: SQL Business Analysis (`5 queries.sql`)
 
 1. **Total Net Revenue:** Calculates overall net revenue after discounts from valid, non-returned transactions (`PKR 865,491,256.76`).
 2. **Top 10 Customers by Total Spending:** Identifies top VIP high-lifetime-value spenders for loyalty tier rewards.
@@ -106,37 +77,9 @@ hackathon/
 
 ## 🖥️ 8. Task G: Streamlit Application (`app.py`)
 
+[Click to open link to app](https://hackaton-jawan-pakistan-zohaib.streamlit.app/)
+
 The Streamlit web application features three primary sections:
 1. **📊 Executive Dashboard:** Live KPI cards, Monthly Net Revenue Trend Area Chart, Category Revenue Bar Chart, City-Wise Revenue Share Donut Chart, and Top 10 Customers / Top 5 Products data tables (powered by direct SQLite queries).
 2. **🔮 Customer Churn Predictor:** Interactive form to input customer recency, spend, order history, and membership tier to generate real-time churn probabilities, risk gauges, and automated retention recommendations.
 3. **💬 Review Sentiment Analyzer:** Live text input and sample selector to analyze customer feedback sentiment with confidence scores.
-
----
-
-## 🚀 9. Local Setup & Streamlit Cloud Deployment Guide
-
-### Local Installation:
-```bash
-# 1. Clone repository
-git clone https://github.com/your-username/ecommerce-intelligence-hackathon.git
-cd ecommerce-intelligence-hackathon
-
-# 2. Install dependencies
-pip install -r requirements.txt
-
-# 3. Launch Streamlit Application
-streamlit run app.py
-```
-
-### Streamlit Community Cloud Deployment:
-1. Push repository to GitHub:
-   ```bash
-   git init
-   git add .
-   git commit -m "feat: complete data science hackathon solution"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/<your-repo-name>.git
-   git push -u origin main
-   ```
-2. Navigate to [share.streamlit.io](https://share.streamlit.io).
-3. Connect your GitHub repository, select `main` branch, set main file path to `app.py`, and click **Deploy**!
